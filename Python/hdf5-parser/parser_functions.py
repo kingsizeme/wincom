@@ -50,22 +50,3 @@ def get_all_bands(data_file):
         all_bands.append(current_band)
 
     return all_bands
-
-
-def get_scan_times(data_file):
-    data_group = data_file['/data']
-
-    # [Dictionary] scan_times = [Integer] Scan ID : [Tuple] (Start Time, End Time)
-    scan_times = dict()
-    scan_id = 0
-    for row in data_group:
-        time_entry = row[0], row[1]
-        scan_times[scan_id] = time_entry
-        scan_id += 1
-
-    return scan_times
-
-
-def get_scan_count(data_file):
-    data_group = data_file['/data']
-    return len(data_group)
