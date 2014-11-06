@@ -1,3 +1,6 @@
+import avro.schema
+from avro.datafile import DataFileWriter
+from avro.io import DatumWriter
 from parser_functions import *
 
 
@@ -24,6 +27,15 @@ class RecordingSession:
                 return band
 
         return None
+
+    def save_as_avro_file(self, output_file):
+        schema_file = 'recording_session.avsc'
+        schema = avro.schema.parse(open(schema_file).read())
+        avro_fields = self.to_avro()
+
+        writer = DataFileWriter(open(output_file, "w"), DatumWriter(), schema)
+        writer.append(avro_fields)
+        writer.close()
 
     def to_avro(self):
         bands = []
