@@ -1,39 +1,40 @@
-{"namespace": "recording_session.avro",
- "type": "record",
- "name": "RecordingSession",
- "fields": [
-    {"name": "filename", "type": "string"},
-    {"name": "date", "type": "string"},
-    {"name": "location", "type": "string"},
-    {"name": "bands", "type":
-        { "type": "array", "items":
-            {
-            "type": "record",
-            "name": "band",
-            "fields": [
-                {"name": "start_freq", "type": "float"},
-                {"name": "stop_freq", "type": "float"},
-                {"name": "resolution", "type": "int"},
-                {"name": "scans", "type":
-                    { "type": "array", "items":
-                        {
-                        "type": "record",
-                        "name": "scan",
-                        "fields": [
-                            {"name": "start_time", "type": "float"},
-                            {"name": "stop_time", "type": "float"},
-                            {"name": "measurements", "type":
-                                {
-                                "type": "array", "items": "float"
+{
+     "namespace": "recording_session.avro",
+     "type": "record",
+     "name": "RecordingSession",
+     "fields": [
+        {"name": "filename", "type": "string"},
+        {"name": "date", "type": "string"},
+        {"name": "location", "type": "string"},
+        {"name": "bands", "type":
+            { "type": "array", "items":
+                {
+                "type": "record",
+                "name": "band",
+                "fields": [
+                    {"name": "start_freq", "type": "float"},
+                    {"name": "stop_freq", "type": "float"},
+                    {"name": "resolution", "type": "int"},
+                    {"name": "scans", "type":
+                        { "type": "array", "items":
+                            {
+                            "type": "record",
+                            "name": "scan",
+                            "fields": [
+                                {"name": "start_time", "type": "float"},
+                                {"name": "stop_time", "type": "float"},
+                                {"name": "measurements", "type":
+                                    {
+                                    "type": "array", "items": "float"
+                                    }
                                 }
+                            ]
                             }
-                        ]
                         }
                     }
+                ]
                 }
-            ]
             }
         }
-    }
- ]
+     ]
 }

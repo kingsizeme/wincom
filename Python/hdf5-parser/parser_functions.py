@@ -6,10 +6,9 @@
 
 import re
 import h5py
+import fastavro
 from os import path
 from Band import Band
-from avro.io import DatumReader
-from avro.datafile import DataFileReader
 
 
 def open_hdf_file(filename):
@@ -26,7 +25,8 @@ def parse_file(data_file):
         for band_id, scan in enumerate(complete_sweep):
             start_time = float(all_scan_times[scan_id][0][band_id])
             end_time = float(all_scan_times[scan_id][1][band_id])
-            file_data[band_id].add_scan(start_time, end_time, scan.tolist())
+            formatted_scan = [float(measurement) for measurement in scan.tolist()]
+            file_data[band_id].add_scan(start_time, end_time, formatted_scan)
 
     return file_data
 
@@ -63,13 +63,13 @@ def get_all_bands(data_file):
 
     return all_bands
 
+
 def open_avro_file(file_path):
-    sessions = []
-    reader = DataFileReader(open(file_path, "rb"), DatumReader())
-    for session in reader:
-        sessions.append(session)
-    reader.close()
-    return sessions
+    # Abandon all hope ye who change from binary read
+    # Seriously, don't it causes encoding errors everywhere
+    reader = fastavro.iter_avro(open(file_path, "rb"))
+    avro_dictionary = reader.next()
+    return avro_dictionary
 
 
 def location_from_name(filename):

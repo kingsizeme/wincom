@@ -1,6 +1,7 @@
 import sys
 from SessionFactory import SessionFactory
 
+
 def parse_hdf_file(input_file, output_file):
     print('[Processing] Creating Session Factory')
     factory = SessionFactory()

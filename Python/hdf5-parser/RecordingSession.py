@@ -15,6 +15,14 @@ class RecordingSession:
     def get_scan_count(self):
         return len(self.scan_times)
 
+    def get_band_summary(self):
+        summary = 'All Bands:\n'
+        band_id = 0
+        for band in self.bands:
+            summary = summary + '[{0}]\n'.format(band_id) + band.to_string()
+            band_id += 1
+        return summary
+
     def get_band_for_frequency(self, frequency):
         for band in self.bands:
             if band.contains_frequency(frequency):

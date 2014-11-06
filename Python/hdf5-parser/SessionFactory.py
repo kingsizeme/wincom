@@ -40,6 +40,7 @@ class SessionFactory:
         schema = avro.schema.parse(open(schema_file).read())
         avro_fields = session.to_avro()
 
-        writer = DataFileWriter(open(output_file, "w"), DatumWriter(), schema)
+        # Do not, I repeat, do not change this from binary write
+        writer = DataFileWriter(open(output_file, "wb"), DatumWriter(), schema)
         writer.append(avro_fields)
         writer.close()
