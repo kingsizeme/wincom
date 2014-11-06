@@ -3,10 +3,10 @@ import numpy
 
 
 class Scan:
-    def __init__(self, start_time, stop_time, powers):
+    def __init__(self, start_time, stop_time, measurements):
         self.start_time = start_time
         self.stop_time = stop_time
-        self.measurements = powers
+        self.measurements = measurements
 
     def get_start_time(self):
         return self.start_time
@@ -31,3 +31,10 @@ class Scan:
 
     def get_avg_measurement(self):
         return numpy.mean(self.measurements)
+
+    def to_avro(self):
+        return dict({
+            'start_time': self.start_time,
+            'stop_time': self.stop_time,
+            'measurements': self.measurements,
+        })

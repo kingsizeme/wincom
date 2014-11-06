@@ -1,4 +1,12 @@
+#
+# Note: This file casts data types from their numpy formats
+#       to their vanilla python formats because Avro dislikes
+#       numpy datatypes.
+#
+
 import h5py
+import re
+from os import path
 from Band import Band
 
 
@@ -14,9 +22,9 @@ def parse_file(data_file):
     all_scan_times = get_all_scan_times(data_file)
     for scan_id, complete_sweep in enumerate(all_data):
         for band_id, scan in enumerate(complete_sweep):
-            start_time = all_scan_times[scan_id][0][band_id]
-            end_time = all_scan_times[scan_id][1][band_id]
-            file_data[band_id].add_scan(start_time, end_time, scan)
+            start_time = float(all_scan_times[scan_id][0][band_id])
+            end_time = float(all_scan_times[scan_id][1][band_id])
+            file_data[band_id].add_scan(start_time, end_time, scan.tolist())
 
     return file_data
 
@@ -35,6 +43,7 @@ def get_all_scan_times(data_file):
     data_group = data_file['/data']
 
     all_scan_times = []
+    # Row = [ Start Time, Stop Time ]
     for row in data_group:
         all_scan_times.append([row[0], row[1]])
 
@@ -45,8 +54,21 @@ def get_all_bands(data_file):
     bands_group = data_file['/bands']
 
     all_bands = []
+    # Row = [Starting Frequency, Stopping Frequency, Resolution]
     for row in bands_group:
-        current_band = Band(row[1], row[2], row[3])
+        current_band = Band(float(row[1]), float(row[2]), int(row[3]))
         all_bands.append(current_band)
 
     return all_bands
+
+
+def filename_from_path(filepath):
+    return path.split(filepath)[1]
+
+
+def file_date_from_name(filename):
+    numbers = re.findall(r"\d+", filename)
+    if len(numbers) == 0:
+        return 'Unknown'
+    else:
+        return numbers[0][:8]

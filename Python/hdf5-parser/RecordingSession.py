@@ -2,8 +2,10 @@ from parser_functions import *
 
 
 class RecordingSession:
-    def __init__(self, filename):
-        data_file = open_hdf_file(filename)
+    def __init__(self, filepath):
+        self.filename = filename_from_path(filepath)
+        self.file_date = file_date_from_name(self.filename)
+        data_file = open_hdf_file(filepath)
         self.bands = parse_file(data_file)
 
     def print_bands(self):
@@ -22,3 +24,14 @@ class RecordingSession:
                 return band
 
         return None
+
+    def to_avro(self):
+        bands = []
+        for band in self.bands:
+            bands.append(band.to_avro())
+
+        return dict({
+            'filename': self.filename,
+            'date': self.file_date,
+            'bands': bands,
+        })

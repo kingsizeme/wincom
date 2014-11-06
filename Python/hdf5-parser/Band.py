@@ -1,27 +1,28 @@
 from Scan import Scan
 
+
 class Band:
-    def __init__(self, start_freq, end_freq, resolution):
+    def __init__(self, start_freq, stop_freq, resolution):
         self.start_freq = start_freq
-        self.end_freq = end_freq
+        self.stop_freq = stop_freq
         self.resolution = resolution
         self.scans = []
 
     def get_starting_frequency(self):
         return self.start_freq
 
-    def get_ending_frequency(self):
-        return self.end_freq
+    def get_stoping_frequency(self):
+        return self.stop_freq
 
     def get_resolution(self):
         return self.resolution
 
     def to_string(self):
         return "Start: {0} Hz\nStop: {1} Hz\nScan Resolution: {2}\n".format(self.start_freq,
-                                                                            self.end_freq, self.resolution)
+                                                                            self.stop_freq, self.resolution)
 
     def contains_frequency(self, test_frequency):
-        if self.start_freq <= test_frequency <= self.end_freq:
+        if self.start_freq <= test_frequency <= self.stop_freq:
             return True
         else:
             return False
@@ -71,3 +72,15 @@ class Band:
             if min_power in scan.get_measurements():
                 scans_including.append((scan.get_start_datetime(), scan.get_stop_datetime()))
         return scans_including
+
+    def to_avro(self):
+        scans = []
+        for scan in self.scans:
+            scans.append(scan.to_avro())
+
+        return dict({
+           'start_freq': self.start_freq,
+           'stop_freq': self.stop_freq,
+           'resolution': self.resolution,
+           'scans': scans,
+        })
