@@ -4,6 +4,7 @@
  "fields": [
     {"name": "filename", "type": "string"},
     {"name": "date", "type": "string"},
+    {"name": "location", "type": "string"},
     {"name": "bands", "type":
         { "type": "array", "items":
             {

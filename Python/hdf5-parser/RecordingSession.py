@@ -7,7 +7,7 @@ class RecordingSession:
 
     def print_bands(self):
         for band in self.bands:
-            print band.to_string()
+            print(band.to_string())
 
     def get_band_count(self):
         return len(self.bands)
