@@ -1,15 +1,9 @@
-import avro.schema
-from avro.datafile import DataFileWriter
-from avro.io import DatumWriter
-from parser_functions import *
-
-
 class RecordingSession:
-    def __init__(self, filepath):
-        self.filename = filename_from_path(filepath)
-        self.file_date = file_date_from_name(self.filename)
-        data_file = open_hdf_file(filepath)
-        self.bands = parse_file(data_file)
+    def __init__(self, filename, file_date, location, bands):
+        self.filename = filename
+        self.file_date = file_date
+        self.location = location
+        self.bands = bands
 
     def print_bands(self):
         for band in self.bands:
@@ -28,15 +22,6 @@ class RecordingSession:
 
         return None
 
-    def save_as_avro_file(self, output_file):
-        schema_file = 'recording_session.avsc'
-        schema = avro.schema.parse(open(schema_file).read())
-        avro_fields = self.to_avro()
-
-        writer = DataFileWriter(open(output_file, "w"), DatumWriter(), schema)
-        writer.append(avro_fields)
-        writer.close()
-
     def to_avro(self):
         bands = []
         for band in self.bands:
@@ -45,5 +30,6 @@ class RecordingSession:
         return dict({
             'filename': self.filename,
             'date': self.file_date,
+            'location': self.location,
             'bands': bands,
         })

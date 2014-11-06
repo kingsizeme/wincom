@@ -4,10 +4,12 @@
 #       numpy datatypes.
 #
 
-import h5py
 import re
+import h5py
 from os import path
 from Band import Band
+from avro.io import DatumReader
+from avro.datafile import DataFileReader
 
 
 def open_hdf_file(filename):
@@ -60,6 +62,19 @@ def get_all_bands(data_file):
         all_bands.append(current_band)
 
     return all_bands
+
+def open_avro_file(file_path):
+    sessions = []
+    reader = DataFileReader(open(file_path, "rb"), DatumReader())
+    for session in reader:
+        sessions.append(session)
+    reader.close()
+    return sessions
+
+
+def location_from_name(filename):
+    split_file = filename.split('_')
+    return split_file[0]
 
 
 def filename_from_path(filepath):
