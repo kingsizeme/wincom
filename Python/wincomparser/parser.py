@@ -18,6 +18,6 @@ if __name__ == '__main__':
     arguments = sys.argv[1:]
     if len(arguments) == 0:
         print("[Error] You didn't include any arguments!\n" +
-              "[Usage] python hdf_parser.py /your/input file/here /your/output file/here")
+              "[Usage] python parser.py /your/input file/here /your/output file/here")
     else:
         parse_hdf_file(arguments[0], arguments[1])

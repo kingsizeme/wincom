@@ -1,5 +1,8 @@
 import avro.schema
-from parser_functions import *
+from os import path
+from avro_parser_functions import *
+from hdf_parser_functions import *
+from rfeye_parser_functions import *
 from avro.io import DatumWriter
 from avro.datafile import DataFileWriter
 from RecordingSession import RecordingSession
@@ -10,11 +13,19 @@ class SessionFactory:
         return
 
     def session_from_hdf_file(self, input_path):
-        filename = filename_from_path(input_path)
-        file_date = file_date_from_name(filename)
-        location = location_from_name(filename)
+        filename = self.filename_from_path(input_path)
+        file_date = file_date_from_hdf_name(filename)
+        location = location_from_hdf_name(filename)
         data_file = open_hdf_file(input_path)
-        bands = parse_file(data_file)
+        bands = parse_hdf_file(data_file)
+        return RecordingSession(filename, file_date, location, bands)
+
+    def session_from_rfeye_file(self, input_path):
+        filename = self.filename_from_path(input_path)
+        file_date = file_date_from_rfeye_name(filename)
+        location = location_from_rfeye_name(filename)
+        data_file = open_rfeye_file(input_path)
+        bands = parse_rfeye_file(data_file)
         return RecordingSession(filename, file_date, location, bands)
 
     def session_from_avro_file(self, input_path):
@@ -44,3 +55,6 @@ class SessionFactory:
         writer = DataFileWriter(open(output_file, "wb"), DatumWriter(), schema)
         writer.append(avro_fields)
         writer.close()
+
+    def filename_from_path(self, filepath):
+        return path.split(filepath)[1]

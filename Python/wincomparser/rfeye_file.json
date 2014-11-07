@@ -1,0 +1,21 @@
+{
+    "rfeye_format": {
+        "file_header": {
+            "version":
+        },
+        "data_block": {
+            "data_header": {
+
+            },
+            "data_payload": {
+
+            },
+            "data_trailer": {
+
+            }
+        },
+        "file_trailer": {
+
+        }
+    }
+}
