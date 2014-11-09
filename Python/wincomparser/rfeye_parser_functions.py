@@ -25,9 +25,6 @@ def open_rfeye_file(filepath):
 
 
 def parse_rfeye_file(data_file):
-    #memory_map = mmap.mmap(data_file.fileno(), 0, access=mmap.ACCESS_READ)
-    #byte_buffer = bytearray(memory_map)
-    #header, byte_buffer = _parse_file_header(byte_buffer)
     header = _parse_file_header(data_file)
     data = _parse_data(data_file)
 
